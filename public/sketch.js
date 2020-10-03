@@ -125,18 +125,23 @@ function formatBatches() {
 
   for (let b = 0; b < 1;b++){
     let batch = [];
-    for (let i = 0; i < 1000; i++) {
-      batch[i] = JSON.stringify(uarrayToData(b,i));
+    for (let k = 0; k < 10; k++) {
+      let minibatch = [];
+      for (let i = 0; i < 1000; i++) {
+        minibatch[i] = JSON.stringify(uarrayToData(b,i));
+
+      }
+      batch[k] = minibatch;
+      downloadObjectAsJson(minibatch[0]+minibatch[1], "data1")
     }
-    for (let i = 1000; i < 2000; i++) {
-      batch[i] = JSON.stringify(uarrayToData(b,i));
-    }
+
+
     dataset[b] = batch;
     console.log("finished batch: " + b);
   }
 
 
-  console.log("'"+dataset[0]+"'");
+  console.log(dataset[0]);
   //downloadObjectAsJson(dataset[0], "data1")
   //return JSON.stringify(dataset[0]);
 }
