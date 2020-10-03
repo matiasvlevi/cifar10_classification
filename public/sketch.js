@@ -3,7 +3,6 @@ let batchNb = 6;
 for (let  i= 0; i < batchNb; i++) {
   batches[i] = [];
 }
-
 let test_batch = [];
 let labels = ["airplane","automobile","bird","cat","deer","dog","frog","horse","ship","truck"];
 async function loadfile(file, offset) {
@@ -123,17 +122,14 @@ function downloadObjectAsJson(exportObj, exportName){
 function formatBatches() {
   let dataset = [];
 
-  for (let b = 0; b < 1;b++){
+  for (let b = 0; b < 5;b++) {
     let batch = [];
-    for (let k = 0; k < 10; k++) {
-      let minibatch = [];
-      for (let i = 0; i < 1000; i++) {
-        minibatch[i] = JSON.stringify(uarrayToData(b,i));
 
-      }
-      batch[k] = minibatch;
-      downloadObjectAsJson(minibatch[0]+minibatch[1], "data1")
+    for (let i = 0; i < 10000; i++) {
+      batch[i] = uarrayToData(b,i);
+
     }
+
 
 
     dataset[b] = batch;
@@ -141,9 +137,9 @@ function formatBatches() {
   }
 
 
-  console.log(dataset[0]);
+  //console.log(dataset);
   //downloadObjectAsJson(dataset[0], "data1")
-  //return JSON.stringify(dataset[0]);
+  return dataset;
 }
 function setup() {
   LoadCIFAR();
@@ -153,6 +149,5 @@ let count = 0;
 let index = 0;
 function draw() {
   background(51);
-
 
 }
