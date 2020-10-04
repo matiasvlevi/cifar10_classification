@@ -65,15 +65,6 @@ function train(minibatch) {
   for (let m = 0; m < minibatch;m++) {
     let accsum = 0;
     let losssum = 0;
-    for (let i = 0; i < 100; i++) {
-      let data = dataset[currentBatch][i+currentIndex];
-      // console.log(data,currentIndex+i,currentBatch)
-      nn.backpropagate(data.inputs,data.target);
-      accsum += test(dataset[0]);
-      losssum+=nn.loss;
-    }
-    accuracies.push(accsum/100);
-    losses.push(losssum/100);
     if (currentIndex >= 10000) {
       currentIndex=0;
       if (currentBatch >= 5) {
@@ -83,7 +74,17 @@ function train(minibatch) {
         currentBatch++;
       }
 
-    } else {
+    }
+    for (let i = 0; i < 100; i++) {
+      let data = dataset[currentBatch][i+currentIndex];
+      // console.log(data,currentIndex+i,currentBatch)
+      nn.backpropagate(data.inputs,data.target);
+      accsum += test(dataset[0]);
+      losssum+=nn.loss;
+    }
+    accuracies.push(accsum/100);
+    losses.push(losssum/100);
+    if (cuurenIndex <= 10000) {
       currentIndex+=100;
     }
 
