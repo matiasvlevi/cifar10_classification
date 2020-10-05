@@ -19,7 +19,7 @@ function findBiggest(arr) {
   let best = 0;
   let bestIndex = 0;
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] >= best) {
+    if (arr[i] > best) {
       best = arr[i];
       bestIndex = i;
     }
@@ -125,15 +125,15 @@ function uarrayToData(batch,index) {
 }
 function test(batch) {
   let sum = 0;
-  for (let i =0; i < 10;i++) {
-    nn.feedForward(batch[i].inputs);
-    guess = labels[findBiggest(nn.outs)];
-    for (let j = 0; j < nn.outs.length; j++) {
-      sum +=1 + batch[i].target[j]-nn.outs[j];
-    }
-    result = sum/nn.outs.length;
-
+  let i = int(random(0,11));
+  nn.feedForward(batch[i].inputs);
+  guess = labels[findBiggest(nn.outs)];
+  for (let j = 0; j < nn.outs.length; j++) {
+    sum +=1 + batch[i].target[j]-nn.outs[j];
   }
+  result = sum/nn.outs.length;
+
+
 
 
   return result/10;
@@ -185,13 +185,13 @@ function uarrayToImage(batch,index) {
   }
   return arr;
 }
-function formatBatches() {
-  dataset = setbatches();
+function formatBatch(b) {
+  dataset.push(setbatches(b));
 }
-function setbatches() {
+function setbatches(b) {
   let data_set = [];
 
-  for (let b = 0; b < 1;b++) {
+
     let batch = [];
 
     for (let i = 0; i < 10000; i++) {
@@ -201,9 +201,9 @@ function setbatches() {
 
 
 
-    data_set[b] = batch;
+    data_set = batch;
     console.log("finished batch: " + b);
-  }
+
 
 
   //console.log(dataset);

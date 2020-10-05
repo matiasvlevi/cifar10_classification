@@ -14,14 +14,13 @@ function setup() {
 }
 function initiateNN() {
   nn = new Dann(3072,10);
-
-  nn.addHiddenLayer(64,leakyReLU);
+  nn.addHiddenLayer(128,leakyReLU);
+  nn.addHiddenLayer(96,leakyReLU);
+  nn.addHiddenLayer(72,leakyReLU);
   nn.addHiddenLayer(32,leakyReLU);
-  nn.addHiddenLayer(32,leakyReLU);
-  nn.addHiddenLayer(16,leakyReLU);
   nn.makeWeights();
-  nn.activation(nn.Layers.length,sigmoid)
-  nn.lr = 0.000003
+  nn.activation(nn.Layers.length-1,sigmoid)
+  nn.lr = 0.000001;
   nn.log();
   nng = new Graph(0,0,600,200);
   nng.addValue(losses,color(0,150,255),"loss");
@@ -29,16 +28,18 @@ function initiateNN() {
 }
 let time = 0;
 let d_index = 0;
+let disp = false;
 function display() {
-  if (nng !== undefined) {
+  if (nng !== undefined && disp == true) {
     nng.render();
     printImgArray(uarrayToImage(0,d_index));
     nn.feedForward(dataset[0][d_index].inputs);
     guess = labels[findBiggest(nn.outs)];
-    console.log(nn.outs)
+
     fill(255);
     text(guess + "/   confidence: "+nn.outs[findBiggest(nn.outs)],320,220);
-    if (time > 250) {
+    if (time > 150) {
+      console.log(nn.outs)
       if (d_index > 10) {
         d_index = 0;
       } else {
@@ -71,20 +72,24 @@ function train(minibatch) {
         currentBatch = 0;
         epoch++;
       } else {
-        currentBatch++;
+        //formatBatch(currentBatch+1);
+        //currentBatch++;
+        currentIndex = 0;
       }
 
     }
     for (let i = 0; i < 100; i++) {
-      let data = dataset[currentBatch][i+currentIndex];
+      let index = (i+currentIndex);
+      let data = dataset[currentBatch][index];
       // console.log(data,currentIndex+i,currentBatch)
       nn.backpropagate(data.inputs,data.target);
-      accsum += test(dataset[0]);
+      accsum += test(dataset[currentBatch]);
       losssum+=nn.loss;
+      console.log("image_" + index+ " trained")
     }
     accuracies.push(accsum/100);
     losses.push(losssum/100);
-    if (cuurenIndex <= 10000) {
+    if (currentIndex <= 10000) {
       currentIndex+=100;
     }
 
